@@ -1,18 +1,23 @@
+import dependencies.Config
+import dependencies.Deps
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.hiroshisasmita.videogamesapp"
-    compileSdk = 33
+    compileSdk = Config.androidCompileSdkVersion
 
     defaultConfig {
         applicationId = "com.hiroshisasmita.videogamesapp"
-        minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = Config.androidMinSdkVersion
+        targetSdk = Config.androidTargetSdkVersion
+        versionCode = Config.applicationVersionCode
+        versionName = Config.applicationVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,17 +35,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
     packaging {
         resources {
@@ -50,20 +55,30 @@ android {
 }
 
 dependencies {
+    implementation(Deps.AndroidX.core)
+    implementation(Deps.AndroidX.lifecycle)
+    implementation(Deps.AndroidX.compose_activity)
+    implementation(Deps.AndroidX.compose_navigation)
+    implementation(platform(Deps.Compose.platform))
+    implementation(Deps.Compose.ui)
+    implementation(Deps.Compose.graphics)
+    implementation(Deps.Compose.preview)
+    implementation(Deps.Compose.material3)
+    testImplementation(Deps.Test.jUnit)
+    androidTestImplementation(Deps.Test.jUnitExt)
+    androidTestImplementation(Deps.Test.espresso)
+    androidTestImplementation(platform(Deps.Compose.platform))
+    androidTestImplementation(Deps.Compose.jUnit4)
+    debugImplementation(Deps.Compose.testUiTooling)
+    debugImplementation(Deps.Compose.testUiManifest)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(Deps.Hilt.core)
+    kapt(Deps.Hilt.compiler)
+
+    implementation(Deps.Glide.core)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
