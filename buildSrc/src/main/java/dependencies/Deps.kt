@@ -26,6 +26,9 @@ object Deps {
         const val jUnit = "junit:junit:4.13.2"
         const val jUnitExt = "androidx.test.ext:junit:1.1.5"
         const val espresso = "androidx.test.espresso:espresso-core:3.5.1"
+        const val mockServer = "com.squareup.okhttp3:mockwebserver:4.11.0"
+        const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2"
+        const val mockK = "io.mockk:mockk:1.12.5"
     }
 
     object Hilt {

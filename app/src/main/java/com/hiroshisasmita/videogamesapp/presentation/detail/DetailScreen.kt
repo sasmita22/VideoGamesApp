@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -97,15 +98,24 @@ fun ContentHeader(item: GameDetailUiModel) {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
-        Text(text = item.publisher)
-        Text(text = item.name)
-        Text(text = "Release date ${item.releaseDate}")
+        Text(
+            text = item.publisher,
+            style = MaterialTheme.typography.labelMedium
+        )
+        Text(
+            text = item.name,
+            style = MaterialTheme.typography.displaySmall
+        )
+        Text(
+            text = "Release date ${item.releaseDate}",
+            style = MaterialTheme.typography.labelLarge
+        )
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 modifier = Modifier
-                    .size(14.dp),
+                    .size(18.dp),
                 imageVector = Icons.Default.Star,
                 contentDescription = "star",
                 tint = Color(0xFFFF9800)
@@ -113,19 +123,19 @@ fun ContentHeader(item: GameDetailUiModel) {
             4.width()
             Text(
                 text = item.rating.toString(),
-                style = MaterialTheme.typography.labelSmall
+                style = MaterialTheme.typography.labelMedium
             )
             4.width()
             Icon(
                 modifier = Modifier
-                    .size(14.dp),
+                    .size(18.dp),
                 painter = painterResource(id = R.drawable.ic_game_controller),
                 contentDescription = "console"
             )
             4.width()
             Text(
                 text = "${item.playCount} Played",
-                style = MaterialTheme.typography.labelSmall
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }

@@ -11,6 +11,7 @@ import com.hiroshisasmita.videogamesapp.domain.model.GameDomain
 import com.hiroshisasmita.videogamesapp.domain.query.GameQuery
 import com.hiroshisasmita.videogamesapp.domain.repository.GameRepository
 import com.hiroshisasmita.videogamesapp.utils.ApiHandler
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -31,11 +32,11 @@ class GameRepositoryImpl(
         ).flow
     }
 
-    override suspend fun fetchGameDetail(id: Int): GameDetailDomain = withContext(Dispatchers.IO) {
+    override suspend fun fetchGameDetail(id: Int): GameDetailDomain {
         val data = ApiHandler.handleApi {
             gameService.fetchGameDetail(id)
         }
         val isFavorite = data?.id?.let { dao.fetchGameById(it) } != null
-        return@withContext data?.toDetailDomain(isFavorite) ?: throw Exception("Data not found")
+        return data?.toDetailDomain(isFavorite) ?: throw Exception("Data not found")
     }
 }

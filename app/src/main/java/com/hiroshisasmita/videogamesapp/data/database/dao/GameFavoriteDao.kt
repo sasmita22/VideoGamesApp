@@ -20,5 +20,5 @@ interface GameFavoriteDao {
     fun fetchFavorites(): Flow<List<GameEntity>>
 
     @Query("SELECT * FROM GameEntity WHERE id = :id")
-    fun fetchGameById(id: Int): GameEntity?
+    suspend fun fetchGameById(id: Int): GameEntity?
 }

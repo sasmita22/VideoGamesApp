@@ -98,6 +98,10 @@ dependencies {
     implementation(Deps.Paging.compose)
 
     implementation(Deps.AndroidX.lifecycleCompose)
+
+    testImplementation(Deps.Test.mockServer)
+    testImplementation(Deps.Test.coroutine)
+    testImplementation(Deps.Test.mockK)
 }
 
 // Allow references to generated code
