@@ -1,8 +1,9 @@
 package com.hiroshisasmita.videogamesapp.presentation.common_component
 
 interface GameItem {
-    val title: String
+    val id: Int
+    val name: String
     val releaseDate: String
-    val rating: String
+    val rating: Double
     val imageUrl: String
 }

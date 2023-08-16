@@ -5,6 +5,7 @@ object Deps {
     object AndroidX {
         const val core = "androidx.core:core-ktx:1.10.1"
         const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+        const val lifecycleCompose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
         const val compose_activity = "androidx.activity:activity-compose:1.7.2"
         const val compose_navigation = "androidx.navigation:navigation-compose:2.6.0"
     }
@@ -30,9 +31,29 @@ object Deps {
     object Hilt {
         const val core = "com.google.dagger:hilt-android:2.44"
         const val compiler = "com.google.dagger:hilt-compiler:2.44"
+        const val compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
     }
 
     object Glide {
         const val core = "com.github.skydoves:landscapist-glide:2.2.6"
+    }
+
+    object Retrofit {
+        const val core = "com.squareup.retrofit2:retrofit:2.9.0"
+        const val gsonConverter = "com.squareup.retrofit2:converter-gson:2.9.0"
+        const val logInterceptor = "com.squareup.okhttp3:logging-interceptor:3.9.0"
+    }
+
+    object Room {
+        private const val room_version = "2.5.2"
+        const val core = "androidx.room:room-runtime:$room_version"
+        const val compiler = "androidx.room:room-compiler:$room_version"
+        const val ktx = "androidx.room:room-ktx:$room_version"
+    }
+
+    object Paging {
+        private const val paging_version = "3.1.1"
+        const val core = "androidx.paging:paging-runtime:$paging_version"
+        const val compose = "androidx.paging:paging-compose:3.2.0"
     }
 }

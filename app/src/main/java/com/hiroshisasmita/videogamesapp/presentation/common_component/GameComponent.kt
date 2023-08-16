@@ -24,7 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hiroshisasmita.videogamesapp.presentation.model.GameUiModel
+import com.hiroshisasmita.videogamesapp.presentation.model.GameDetailUiModel
 import com.hiroshisasmita.videogamesapp.utils.LoadNetworkImage
 import com.hiroshisasmita.videogamesapp.utils.width
 
@@ -56,7 +56,7 @@ fun GameComponent(item: GameItem, onClick: (GameItem) -> Unit = {}) {
                 .height(IntrinsicSize.Max)
         ) {
             Text(
-                text = item.title,
+                text = item.name,
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
@@ -75,18 +75,10 @@ fun GameComponent(item: GameItem, onClick: (GameItem) -> Unit = {}) {
                 )
                 4.width()
                 Text(
-                    text = item.rating,
+                    text = item.rating.toString(),
                     style = MaterialTheme.typography.labelSmall
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ComponentPreview() {
-    val item = GameUiModel.createDummy().first()
-
-    GameComponent(item = item)
 }

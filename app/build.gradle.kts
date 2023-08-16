@@ -8,6 +8,8 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val buildString = { k: String -> "\"${k}\"" }
+
 android {
     namespace = "com.hiroshisasmita.videogamesapp"
     compileSdk = Config.androidCompileSdkVersion
@@ -18,6 +20,11 @@ android {
         targetSdk = Config.androidTargetSdkVersion
         versionCode = Config.applicationVersionCode
         versionName = Config.applicationVersionName
+
+        val apiKey = "39b0b2e635384d158f3b6fdd62f87b7d"
+
+        resValue("string", "app_name", buildString(Config.appName))
+        buildConfigField("String", "API_KEY", buildString(apiKey))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -43,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.8"
@@ -73,9 +81,23 @@ dependencies {
     debugImplementation(Deps.Compose.testUiManifest)
 
     implementation(Deps.Hilt.core)
+    implementation(Deps.Hilt.compose)
     kapt(Deps.Hilt.compiler)
 
     implementation(Deps.Glide.core)
+
+    implementation(Deps.Retrofit.core)
+    implementation(Deps.Retrofit.gsonConverter)
+    implementation(Deps.Retrofit.logInterceptor)
+
+    implementation(Deps.Room.core)
+    kapt(Deps.Room.compiler)
+    implementation(Deps.Room.ktx)
+
+    implementation(Deps.Paging.core)
+    implementation(Deps.Paging.compose)
+
+    implementation(Deps.AndroidX.lifecycleCompose)
 }
 
 // Allow references to generated code

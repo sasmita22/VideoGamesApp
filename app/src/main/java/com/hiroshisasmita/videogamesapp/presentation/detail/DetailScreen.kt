@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -17,31 +18,60 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hiroshisasmita.videogamesapp.R
-import com.hiroshisasmita.videogamesapp.presentation.model.GameUiModel
+import com.hiroshisasmita.videogamesapp.core.Result
+import com.hiroshisasmita.videogamesapp.presentation.common_component.RefreshError
+import com.hiroshisasmita.videogamesapp.presentation.model.GameDetailUiModel
 import com.hiroshisasmita.videogamesapp.utils.LoadNetworkImage
 import com.hiroshisasmita.videogamesapp.utils.width
 
 @Composable
-fun DetailScreen(navController: NavController) {
+fun DetailScreen(navController: NavController, gameId: Int?, viewModel: DetailScreenViewModel = hiltViewModel()) {
+
+    val result = viewModel.gameDetail.collectAsStateWithLifecycle()
+    val isFavorite = viewModel.isFavorite.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        gameId?.let { viewModel.fetchDetail(it) }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Toolbar { navController.popBackStack() }
-        Content()
+        Toolbar(
+            isFavorite = isFavorite.value,
+            onFavoriteClick = { viewModel.actionClickFavorite() },
+            onBackPress = { navController.popBackStack() }
+        )
+        val resultValue = result.value ?: return@Column
+        when (resultValue) {
+            is Result.Success -> {
+                Content(resultValue.data)
+            }
+            is Result.Error -> {
+                RefreshError(
+                    modifier = Modifier.fillMaxSize(),
+                    exception = resultValue.exception
+                ) {
+
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun Content() {
-    val item = GameUiModel.createDummy().first()
+fun Content(item: GameDetailUiModel) {
     Column {
         LoadNetworkImage(
             imageUrl = item.imageUrl,
@@ -58,12 +88,12 @@ fun Content() {
 }
 
 @Composable
-fun ContentHeader(item: GameUiModel) {
+fun ContentHeader(item: GameDetailUiModel) {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
         Text(text = item.publisher)
-        Text(text = item.title)
+        Text(text = item.name)
         Text(text = "Release date ${item.releaseDate}")
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -77,7 +107,7 @@ fun ContentHeader(item: GameUiModel) {
             )
             4.width()
             Text(
-                text = item.rating,
+                text = item.rating.toString(),
                 style = MaterialTheme.typography.labelSmall
             )
             4.width()
@@ -89,7 +119,7 @@ fun ContentHeader(item: GameUiModel) {
             )
             4.width()
             Text(
-                text = "${item.countPlayed} Played",
+                text = "${item.playCount} Played",
                 style = MaterialTheme.typography.labelSmall
             )
         }
@@ -98,6 +128,8 @@ fun ContentHeader(item: GameUiModel) {
 
 @Composable
 fun Toolbar(
+    isFavorite: Boolean,
+    onFavoriteClick: () -> Unit,
     onBackPress: () -> Unit
 ) {
     Row(
@@ -107,7 +139,7 @@ fun Toolbar(
             .padding(vertical = 6.dp, horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { onBackPress() }) {
+        IconButton(onClick = onBackPress) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "back_icon",
@@ -122,9 +154,9 @@ fun Toolbar(
             color = Color.White
         )
         16.width()
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = onFavoriteClick) {
             Icon(
-                imageVector = Icons.Default.FavoriteBorder,
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 contentDescription = "fav_icon",
                 tint = Color.White
             )

@@ -34,7 +34,7 @@ fun LoadNetworkImage(
         },
         // shows an error text if fail to load an image.
         failure = {
-            Text(text = "image request failed.")
+            Text(text = "Failed")
         },
         previewPlaceholder = R.drawable.sample_game
     )
