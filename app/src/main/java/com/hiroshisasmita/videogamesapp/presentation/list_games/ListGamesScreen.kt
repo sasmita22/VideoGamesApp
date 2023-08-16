@@ -1,5 +1,7 @@
 package com.hiroshisasmita.videogamesapp.presentation.list_games
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -18,7 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -29,6 +35,7 @@ import androidx.paging.compose.itemKey
 import com.hiroshisasmita.videogamesapp.presentation.common_component.GameComponent
 import com.hiroshisasmita.videogamesapp.presentation.common_component.GameItem
 import com.hiroshisasmita.videogamesapp.presentation.common_component.HeaderMenu
+import com.hiroshisasmita.videogamesapp.presentation.common_component.RefreshError
 import com.hiroshisasmita.videogamesapp.presentation.common_component.RefreshLoading
 import com.hiroshisasmita.videogamesapp.presentation.model.GameUiModel
 import com.hiroshisasmita.videogamesapp.presentation.nav_graph.app.AppNavItem
@@ -52,37 +59,108 @@ fun ListGamesScreen(navController: NavController, viewModel: ListGamesScreenView
     ) {
         HeaderMenu(title = "Games For You")
         Column {
-            SearchComponent() {
+            SearchComponent {
                 viewModel.updateSearchQuery(it)
             }
             8.height()
-            ListGames(games) {
-                navController.navigate(route = AppNavItem.Detail(it.id).screenRoute)
+            Content(
+                paging = games,
+                onClick = { navController.navigate(route = AppNavItem.Detail(it.id).screenRoute) },
+                onRefresh = { games.refresh() },
+                onRetry = { games.retry() }
+            )
+        }
+    }
+}
+
+@Composable
+fun Content(
+    paging: LazyPagingItems<GameUiModel>,
+    onClick: (GameItem) -> Unit,
+    onRefresh: () -> Unit,
+    onRetry: () -> Unit
+) {
+    when (paging.loadState.refresh) {
+        is LoadState.Loading -> {
+            RefreshLoading(modifier = Modifier.fillMaxSize())
+        }
+
+        is LoadState.Error -> {
+            RefreshError(
+                modifier = Modifier.fillMaxSize(),
+                exception = Exception((paging.loadState.refresh as LoadState.Error).error)
+            ) {
+                onRefresh()
+            }
+        }
+
+        else -> {
+            ListGames(paging, onClick, onRetry)
+        }
+    }
+}
+
+@Composable
+fun ListGames(
+    lazyPagingItems: LazyPagingItems<GameUiModel>,
+    onClick: (GameItem) -> Unit,
+    onRetry: () -> Unit
+) {
+    LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
+        items(
+            lazyPagingItems.itemCount,
+            key = lazyPagingItems.itemKey { it.id }
+        ) {index ->
+            val item = lazyPagingItems[index] ?: return@items
+            GameComponent(item = item, onClick = onClick)
+        }
+
+        item {
+            if (lazyPagingItems.loadState.append is LoadState.Loading) {
+                LoadingAppend()
+            }
+        }
+
+        item {
+            if (lazyPagingItems.loadState.append is LoadState.Error) {
+                val errorMessage = (lazyPagingItems.loadState.append as? LoadState.Error)?.error?.message.orEmpty()
+                ErrorAppend(
+                    message = errorMessage,
+                    onRetry = onRetry
+                )
             }
         }
     }
 }
 
 @Composable
-fun ListGames(lazyPagingItems: LazyPagingItems<GameUiModel>, onClick: (GameItem) -> Unit) {
-    when (lazyPagingItems.loadState.refresh) {
-        LoadState.Loading -> {
-            RefreshLoading(modifier = Modifier.fillMaxSize())
+fun ErrorAppend(message: String, onRetry: () -> Unit) {
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = message, textAlign = TextAlign.Center)
+        12.height()
+        Button(
+            onClick = onRetry
+        ) {
+            Text(text = "Retry")
         }
-        is LoadState.Error -> {
+    }
+}
 
-        }
-        else -> {
-            LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
-                items(
-                    lazyPagingItems.itemCount,
-                    key = lazyPagingItems.itemKey { it.id }
-                ) {index ->
-                    val item = lazyPagingItems[index] ?: return@items
-                    GameComponent(item = item, onClick = onClick)
-                }
-            }
-        }
+@Composable
+fun LoadingAppend() {
+    Box (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
     }
 }
 

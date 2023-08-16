@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun RefreshError(
@@ -20,7 +21,10 @@ fun RefreshError(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(exception.toString())
+        Text(
+            text = exception.toString(),
+            textAlign = TextAlign.Center
+        )
         Button(onClick = onRetry) {
             Text(text = "Retry")
         }

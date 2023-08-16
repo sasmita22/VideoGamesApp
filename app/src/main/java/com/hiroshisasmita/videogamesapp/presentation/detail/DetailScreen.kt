@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -46,13 +48,16 @@ fun DetailScreen(navController: NavController, gameId: Int?, viewModel: DetailSc
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Toolbar(
             isFavorite = isFavorite.value,
             onFavoriteClick = { viewModel.actionClickFavorite() },
             onBackPress = { navController.popBackStack() }
         )
+
         val resultValue = result.value ?: return@Column
         when (resultValue) {
             is Result.Success -> {
@@ -63,7 +68,7 @@ fun DetailScreen(navController: NavController, gameId: Int?, viewModel: DetailSc
                     modifier = Modifier.fillMaxSize(),
                     exception = resultValue.exception
                 ) {
-
+                    gameId?.let { viewModel.fetchDetail(it) }
                 }
             }
         }
