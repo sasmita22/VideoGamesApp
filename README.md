@@ -5,7 +5,7 @@ This application shows how to create Android Application using Jetpack Compose a
 
 ## Screenshots
 
-<img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/game_list.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/favorite_list.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/detail.png?raw=true" width="250" height="600">
+<img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/splash_screen.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/game_list.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/favorite_list.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/detail.png?raw=true" width="250" height="600">
 
 
 ## Features
