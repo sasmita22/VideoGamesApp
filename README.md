@@ -12,10 +12,11 @@ This application shows how to create Android Application using Jetpack Compose a
 
 - List of Games (Pagination)
 - Search Games (Pagination)
-- List of Favorite Games (Local)
+- List of Favorite Games (Local Database)
 - Game Detail
 - Add Game as Favorite
 - Remove Game from Favorite
+- Retry Mechanism When Api Error
 
 
 ## Tech Stack
@@ -33,5 +34,8 @@ This application shows how to create Android Application using Jetpack Compose a
 **Local Database:** Room
 
 **Third Party Library:** Retrofit, Glide, Paging3 (Pagination)
+
+**Testing Tools:** jUnit, MockK, MockWebServer
+
 ## API Reference
 https://rawg.io/apidocs
