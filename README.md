@@ -3,6 +3,10 @@
 
 This application shows how to create Android Application using Jetpack Compose as User Interface, MVVM + Clean Architecture as Design Pattern, Room as Local Database, Hilt as Dependency Injection, Paging3 as Pagination library and Kotlin Coroutine & Kotlin Flow as Tools to implement reactive programming paradigm.
 
+## Screenshots
+
+<img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/game_list.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/favorite_list.png?raw=true" width="250" height="600"> | <img src="https://github.com/sasmita22/VideoGamesApp/blob/main/screenshot/detail.png?raw=true" width="250" height="600">
+
 
 ## Features
 
